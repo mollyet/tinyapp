@@ -20,14 +20,21 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// renders urls as  json object
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
+
+app.get("/urls/:shortURL", (req, res) => {
+  const templateVars = { shortURL: req.params.shortURL, longURL: req.params.longURL};
+  res.render("urls_show", templateVars)
+})
 
 
 // lets server listen, end of server functionality 

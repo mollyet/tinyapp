@@ -40,5 +40,5 @@ app.get("/urls/:shortURL", (req, res) => {
 // lets server listen, end of server functionality 
 
 app.listen(PORT, () => {
-  console.log(`Hello from sunny port ${PORT}!`);
+  console.log(`Hello from Sunny Port ${PORT}! 🌈 🌞 🌴`);
 });

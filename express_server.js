@@ -72,6 +72,13 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL)
 });
 
+app.post("/urls/:shortURL/delete", (req,res) => {
+  const shortURL = req.params.shortURL
+  console.log(shortURL)
+  delete urlDatabase[shortURL]
+  res.redirect("/urls")
+})
+
 
 // lets server listen, end of server functionality 
 

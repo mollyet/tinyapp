@@ -32,6 +32,19 @@ const urlDatabase = {
   "9sm5xK": "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item"
 };
 
+const users = {
+  "jimmy": {
+    id: "jimmy",
+    email: "jimmy@dude.com",
+    password: "dude"
+  },
+  "Lola": {
+    id: "Lola",
+    email: "lola@meow.com",
+    password: "meow"
+  }
+}
+
 //test url is from Bibliotheque Nationale France, and shows a manuscript image of
 // Chiristine de Pizan presumably writing this Manuscript. BnF Francais 835, f. 1r https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445
 

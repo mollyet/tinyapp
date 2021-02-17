@@ -76,7 +76,7 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL], 
     username: req.cookies["username"] 
   };
-  console.log(urlDatabase)
+  // console.log(urlDatabase)
   res.render("urls_show", templateVars);
 });
 

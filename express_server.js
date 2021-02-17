@@ -1,13 +1,15 @@
 // sets up server
 
 const express = require("express");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 8080;
-const bodyParser = require("body-parser");
 
 // middleware soon? 
 app.set("view engine", "ejs"); //in this house we use ejs as our view engine 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser())
 
 //globl functions -- move to helper file
 
@@ -46,13 +48,19 @@ app.get("/urls.json", (req, res) => {
 
 // main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = { 
+    urls: urlDatabase, 
+    username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
 //add new url
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = { 
+    username: req.cookies["username"]
+  }
+  res.render("urls_new", templateVars);
 });
 app.post("/urls", (req,res) => {
   const shortURL = randomString();
@@ -63,13 +71,17 @@ app.post("/urls", (req,res) => {
 
 // points to specific short url
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  const templateVars = { 
+    shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL], 
+    username: req.cookies["username"] 
+  };
   console.log(urlDatabase)
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  console.log(req.params.shortURL)
+  // console.log(req.params.shortURL)
   const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL)
 });
@@ -77,8 +89,8 @@ app.get("/u/:shortURL", (req, res) => {
 app.post("/urls/:shortURL/edit", (req,res) => {
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL
-  console.log(longURL)
-  console.log(req.body)
+  // console.log(longURL)
+  // console.log(req.body)
   urlDatabase[shortURL] = longURL
   res.redirect(`/urls/${shortURL}`)
 });
@@ -89,6 +101,19 @@ app.post("/urls/:shortURL/delete", (req,res) => {
   res.redirect("/urls")
 })
 
+// login/logout user functionaltiy 
+
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  // console.log(username)
+  res.cookie("username", username);
+  res.redirect("/urls");
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
+  res.redirect("/urls")
+})
 
 // lets server listen, end of server functionality 
 

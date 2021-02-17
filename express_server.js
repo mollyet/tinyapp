@@ -27,10 +27,11 @@ const randomString = function () {
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "9sm5xK": "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item"
 };
 
-//test url, from gallica bnf: https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item
+//test url is from Bibliotheque Nationale France, and shows a manuscript image of
+// Chiristine de Pizan presumably writing this Manuscript. BnF Francais 835, f. 1r https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445
 
 // server functionality-- pages/etc
 
@@ -63,6 +64,7 @@ app.post("/urls", (req,res) => {
 // points to specific short url
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  console.log(urlDatabase)
   res.render("urls_show", templateVars);
 });
 
@@ -72,9 +74,17 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL)
 });
 
+app.post("/urls/:shortURL/edit", (req,res) => {
+  const shortURL = req.params.shortURL;
+  const longURL = req.body.longURL
+  console.log(longURL)
+  console.log(req.body)
+  urlDatabase[shortURL] = longURL
+  res.redirect(`/urls/${shortURL}`)
+});
+
 app.post("/urls/:shortURL/delete", (req,res) => {
   const shortURL = req.params.shortURL
-  console.log(shortURL)
   delete urlDatabase[shortURL]
   res.redirect("/urls")
 })

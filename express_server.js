@@ -115,6 +115,16 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls")
 })
 
+//error pages
+
+app.get("*", (req,res) => {
+  const templateVars = { 
+    username: req.cookies["username"]
+  }
+  res.status(404)
+  res.render("404", templateVars)
+});
+
 // lets server listen, end of server functionality 
 
 app.listen(PORT, () => {

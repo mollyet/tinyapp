@@ -16,19 +16,21 @@
     <h3>Register!</h3>
     <form method="POST" action="/register">
     <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">Username</span>
+      <!-- <div class="input-group-prepend">
+        <span class="input-group-text" name="username">Username</span>
       </div>
-      <input type="text" class="form-control" placeholder="Username">
+      <input type="text" class="form-control"  name="username" placeholder="Username"> -->
       <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">Password</span>
+        <span class="input-group-text" name="email">Email</span>
       </div>
-      <input type="password" class="form-control" placeholder="Top Secret Password">
+      <input type="email" class="form-control"  name="email" placeholder="email">
+      <div class="input-group-prepend">
+        <span class="input-group-text" name="password">Password</span>
+      </div>
+      <input type="password" class="form-control"  name="password" placeholder="Top Secret Password">
+      <button type="submit" > Register!</button>
     </div>
-    
-      <!-- <input type="text" name="username" /> -->
-      <!-- <input type="password" name="password" /> -->
-      <button type="submit" name="register" > Register!</button>
+      </form>
   </main>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -13,10 +13,10 @@
     </div>
     
     <div class= "input-group-append">
-        <% if (username) { %> 
+        <% if (user) { %> 
           <form method="POST" action="/logout" class ="nav-item">
             <div class="input-group-append">
-              <a class ="nav-item nav-link" >hello, <%= username %>! </a> 
+              <a class ="nav-item nav-link" >hello, <%= user.email %>! </a> 
               <button type="submit" id="button-addon2">Logout!</button>
             </div>
           </form>

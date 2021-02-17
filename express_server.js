@@ -148,6 +148,14 @@ app.post("/register", (req,res) => {
 })
 //error pages
 
+app.get("/400", (req, res) => {
+  const templateVars ={
+    user: users[req.cookies["user_id"]]
+  }
+  res.status(400);
+  res.render("400", templateVars)
+})
+
 app.get("*", (req,res) => {
   const templateVars = { 
     user: users[req.cookies["user_id"]]

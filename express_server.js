@@ -3,6 +3,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { randomString } = require("./helpers");
+const { findEmail } = require("./helpers")
 const app = express();
 const PORT = 8080;
 
@@ -13,17 +15,7 @@ app.use(cookieParser())
 
 //globl functions -- move to helper file
 
-const randomString = function () {
-  // inspired from this function found on stackoverflow: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/27747377
-  // currently hardcoded for a 6 character long string
-  
-  const abcNums = "abcdefghijklmnopqrstuvwxyzABCEDEGHIJKLMNOPQRSTUVWXYZ1234567890";
-  let newString = "";
-  for (let i = 0; i < 6; i++) {
-    newString += abcNums.charAt(Math.floor(Math.random() * abcNums.length));
-  }
-  return newString;
-};
+
 
 // global objects (change to class/instanse flavor)
 
@@ -141,10 +133,24 @@ app.post("/register", (req,res) => {
   const userID = randomString()
   const email = req.body.email
   const password = req.body.password
-  users[userID] = { id: userID, email: email, password: password };
-  console.log((users[userID]));
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
+
+  if (!email || !password) {
+    res.redirect("/400")
+  } 
+  for (const user in users){
+    console.log("user: ",user)
+    console.log("user flavor: ", typeof user)
+    console.log(findEmail(user, email)) // should equal true
+  if (findEmail(user, email)) {
+    res.redirect("/400")
+  } else {
+    users[userID] = { id: userID, email: email, password: password };
+    console.log((users[userID]));
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
+  }
+}
+
 })
 //error pages
 

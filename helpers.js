@@ -1,6 +1,32 @@
-// helper f(x)s for express_server.js
+// fine exportables for express_server.js
 
-//
+// global f(x)s for testing, from express_server.js
+
+const urlDatabase = {
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID:"Lola" },
+  "QoLQWw":	{ longURL: "http://jsforcats.com/", userID: "Lola" },
+  "9sm5xK": { longURL: "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item", userID: "Jimmy" },
+  "Nt1QmP":	{ longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy"}
+};
+
+//both of Jimmy's url are  from Bibliotheque Nationale France, onse show a manuscript image of
+// Chiristine de Pizan presumably writing this Manuscript, BnF Francais 835, f. 1r . 
+//The other is the actual libary info/ write up for said MS; 
+
+const users = {
+  "Jimmy": {
+    id: "Jimmy",
+    email: "jimmy@dude.com",
+    password: "$2a$10$u2lwwwhXo/qyEzBsl1br3.Nkw1LHE2fU7a4fcagP1cXVt5D20B8V6"
+  },
+  "Lola": {
+    id: "Lola",
+    email: "lola@meow.com",
+    password: "$2a$10$LN4332ZB7ToT4U5c1WCxTO2M//q8DVm/SnGOw2Vopvm4kU3et03VW"
+  }
+};
+
+// helper f(x)s
 
 //modifed "findKeyByValue f(x) from lotide project"
 const findEmail = function(obj, value) {
@@ -45,4 +71,4 @@ const randomString = function () {
 // console.log(findEmail(test, oof)) //true
 
 
-module.exports = { findEmail, randomString, findURL }
+module.exports = { findEmail, randomString, findURL, urlDatabase, users }

@@ -2,48 +2,29 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 const bcrypt = require('bcryptjs');
 const { randomString } = require("./helpers");
 const { findEmail } = require("./helpers");
 const { findURL } = require("./helpers")
+const { users } = require("./helpers")
+const { urlDatabase } = require("./helpers")
 const app = express();
 const PORT = 8080;
 
 // middleware soon? 
 app.set("view engine", "ejs"); //in this house we use ejs as our view engine 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieSession({
+  name: "session",
+  keys: ["skeleton-key", "crypt-key", "fancy-key" ],
+}));
 
-//globl functions -- move to helper file
+//globl functions -- moved to helpers.js
 
 
 
-// global objects (change to class/instanse flavor)
-
-const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID:"Lola" },
-  "QoLQWw":	{ longURL: "http://jsforcats.com/", userID: "Lola" },
-  "9sm5xK": { longURL: "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item", userID: "Jimmy" },
-  "Nt1QmP":	{ longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy"}
-};
-
-//both of Jimmy's url are  from Bibliotheque Nationale France, onse show a manuscript image of
-// Chiristine de Pizan presumably writing this Manuscript, BnF Francais 835, f. 1r . 
-//The other is the actual libary info/ write up for said MS; 
-
-const users = {
-  "Jimmy": {
-    id: "Jimmy",
-    email: "jimmy@dude.com",
-    password: "$2a$10$u2lwwwhXo/qyEzBsl1br3.Nkw1LHE2fU7a4fcagP1cXVt5D20B8V6"
-  },
-  "Lola": {
-    id: "Lola",
-    email: "lola@meow.com",
-    password: "$2a$10$LN4332ZB7ToT4U5c1WCxTO2M//q8DVm/SnGOw2Vopvm4kU3et03VW"
-  }
-};
+// global objects -- moved to helpers.js
 
 
 // server functionality-- pages/etc
@@ -59,7 +40,7 @@ app.get("/urls.json", (req, res) => {
 
 // main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
-  const user = req.cookies.user_id
+  const user = req.session.user_id
   let filteredDatabase = {}
  for (let url in urlDatabase){
     if (findURL(urlDatabase[url], user)){
@@ -69,7 +50,7 @@ app.get("/urls", (req, res) => {
 if (user) {
   const templateVars = {
    urls: filteredDatabase,
-   user: users[req.cookies["user_id"]]
+   user: users[req.session.user_id]
   }
    res.render("urls_index", templateVars);
    return;
@@ -79,7 +60,7 @@ if (user) {
 
 //add new url
 app.get("/urls/new", (req, res) => {
-  const user = req.cookies.user_id
+  const user = req.session.user_id
   const templateVars = {
     user: users[req.cookies["user_id"]]
   };
@@ -103,7 +84,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: shortURL,
     longURL: urlDatabase[shortURL].longURL,
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.render("urls_show", templateVars);
 });
@@ -115,7 +96,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
-  const user = req.cookies.user_id
+  const user = req.session.user_id
   if (user) {
     const shortURL = req.params.shortURL;
     const longURL = req.body.longURL;
@@ -127,7 +108,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const user = req.cookies.user_id
+  const user = req.session.user_id
   const shortURL = req.params.shortURL;
   if(user) {
     delete urlDatabase[shortURL];
@@ -137,16 +118,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 
-app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
-  res.redirect("/urls");
-});
 
 //registration
 
 app.get("/register", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.render("register", templateVars);
 });
@@ -167,7 +144,7 @@ app.post("/register", (req, res) => {
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(password, salt, (err, hash) => {
       users[userID] = { id: userID, email: email, password: hash };
-      res.cookie("user_id", userID);
+      req.session.user_id = userID
       res.redirect("/urls");
     })
   })
@@ -177,7 +154,7 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.render("login", templateVars);
 });
@@ -188,7 +165,7 @@ app.post("/login", (req, res) => {
   for (const user in users) {
     if (findEmail(users[user], email)) {
       if (bcrypt.compareSync(password, users[user].password)) {
-        res.cookie("user_id", users[user].id);
+        req.session.user_id = users[user].id;
         res.redirect("/urls");
         return;
       }
@@ -198,6 +175,10 @@ app.post("/login", (req, res) => {
   res.redirect("/403_reg");
 });
 
+app.post("/logout", (req, res) => {
+  req.session = null;
+  res.redirect("/urls");
+});
 
 //error pages
 

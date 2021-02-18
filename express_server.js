@@ -36,12 +36,12 @@ const users = {
   "Jimmy": {
     id: "Jimmy",
     email: "jimmy@dude.com",
-    password: "dude"
+    password: "$2a$10$u2lwwwhXo/qyEzBsl1br3.Nkw1LHE2fU7a4fcagP1cXVt5D20B8V6"
   },
   "Lola": {
     id: "Lola",
     email: "lola@meow.com",
-    password: "meow"
+    password: "$2a$10$LN4332ZB7ToT4U5c1WCxTO2M//q8DVm/SnGOw2Vopvm4kU3et03VW"
   }
 };
 

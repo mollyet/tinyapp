@@ -128,7 +128,7 @@ app.post("/login", (req, res) => {
         res.cookie("user_id", users[user].id)
         res.redirect("/urls");
       }
-    }
+    } 
   }
   res.redirect("/register")
 });
@@ -168,6 +168,22 @@ app.post("/register", (req, res) => {
   }
 });
 //error pages
+
+app.get("/403_cred", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["user_id"]]
+  };
+  res.status(403);
+  res.render("403_cred", templateVars);
+});
+
+app.get("/403_reg", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["user_id"]]
+  };
+  res.status(403);
+  res.render("403_reg", templateVars);
+});
 
 app.get("/400", (req, res) => {
   const templateVars = {

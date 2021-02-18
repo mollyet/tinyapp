@@ -4,14 +4,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { randomString } = require("./helpers");
-const { findEmail } = require("./helpers")
+const { findEmail } = require("./helpers");
 const app = express();
 const PORT = 8080;
 
 // middleware soon? 
 app.set("view engine", "ejs"); //in this house we use ejs as our view engine 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 //globl functions -- move to helper file
 
@@ -34,8 +34,13 @@ const users = {
     id: "Lola",
     email: "lola@meow.com",
     password: "meow"
+  },
+  "butts": {
+    id: "butts",
+    email: "butts@farts.com",
+    password: "butts"
   }
-}
+};
 
 //test url is from Bibliotheque Nationale France, and shows a manuscript image of
 // Chiristine de Pizan presumably writing this Manuscript. BnF Francais 835, f. 1r https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445
@@ -53,8 +58,8 @@ app.get("/urls.json", (req, res) => {
 
 // main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
-  const templateVars = { 
-    urls: urlDatabase,  
+  const templateVars = {
+    urls: urlDatabase,
     user: users[req.cookies["user_id"]]
   };
   res.render("urls_index", templateVars);
@@ -62,12 +67,12 @@ app.get("/urls", (req, res) => {
 
 //add new url
 app.get("/urls/new", (req, res) => {
-  const templateVars = { 
+  const templateVars = {
     user: users[req.cookies["user_id"]]
-  }
+  };
   res.render("urls_new", templateVars);
 });
-app.post("/urls", (req,res) => {
+app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
@@ -76,9 +81,9 @@ app.post("/urls", (req,res) => {
 
 // points to specific short url
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { 
-    shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL], 
+  const templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
     user: users[req.cookies["user_id"]]
   };
   // console.log(urlDatabase)
@@ -87,24 +92,24 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   // console.log(req.params.shortURL)
-  const longURL = urlDatabase[req.params.shortURL]
-  res.redirect(longURL)
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
 });
 
-app.post("/urls/:shortURL/edit", (req,res) => {
+app.post("/urls/:shortURL/edit", (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = req.body.longURL
+  const longURL = req.body.longURL;
   // console.log(longURL)
   // console.log(req.body)
-  urlDatabase[shortURL] = longURL
-  res.redirect(`/urls/${shortURL}`)
+  urlDatabase[shortURL] = longURL;
+  res.redirect(`/urls/${shortURL}`);
 });
 
-app.post("/urls/:shortURL/delete", (req,res) => {
-  const shortURL = req.params.shortURL
-  delete urlDatabase[shortURL]
-  res.redirect("/urls")
-})
+app.post("/urls/:shortURL/delete", (req, res) => {
+  const shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+  res.redirect("/urls");
+});
 
 // login/logout user functionaltiy 
 
@@ -117,57 +122,54 @@ app.post("/login", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
-  res.redirect("/urls")
-})
+  res.redirect("/urls");
+});
 
 //registration
 
 app.get("/register", (req, res) => {
-  const templateVars = { 
+  const templateVars = {
     user: users[req.cookies["user_id"]]
-  }
-  res.render("register", templateVars)
+  };
+  res.render("register", templateVars);
 });
 
-app.post("/register", (req,res) => {
-  const userID = randomString()
-  const email = req.body.email
-  const password = req.body.password
+app.post("/register", (req, res) => {
+  const userID = randomString();
+  const email = req.body.email;
+  const password = req.body.password;
 
   if (!email || !password) {
-    res.redirect("/400")
-  } 
-  for (const user in users){
-    console.log("user: ",user)
-    console.log("user flavor: ", typeof user)
-    console.log(findEmail(user, email)) // should equal true
-  if (findEmail(user, email)) {
-    res.redirect("/400")
-  } else {
-    users[userID] = { id: userID, email: email, password: password };
-    console.log((users[userID]));
-    res.cookie("user_id", userID);
-    res.redirect("/urls");
+    res.redirect("/400");
   }
-}
-
-})
+  for (const user in users) {
+    if (findEmail(users[user], email)) {
+      res.redirect("/400");
+      return;
+    }
+  }
+  users[userID] = { id: userID, email: email, password: password };
+  console.log((users[userID]));
+  console.log(users);
+  res.cookie("user_id", userID);
+  res.redirect("/urls");
+});
 //error pages
 
 app.get("/400", (req, res) => {
-  const templateVars ={
+  const templateVars = {
     user: users[req.cookies["user_id"]]
-  }
+  };
   res.status(400);
-  res.render("400", templateVars)
-})
+  res.render("400", templateVars);
+});
 
-app.get("*", (req,res) => {
-  const templateVars = { 
+app.get("*", (req, res) => {
+  const templateVars = {
     user: users[req.cookies["user_id"]]
-  }
-  res.status(404)
-  res.render("404", templateVars)
+  };
+  res.status(404);
+  res.render("404", templateVars);
 });
 
 // lets server listen, end of server functionality 

@@ -1,6 +1,8 @@
 // helper f(x)s for express_server.js
 
 //
+
+//modifed "findKeyByValue f(x) from lotide project"
 const findEmail = function(obj, value) {
   for (let key of Object.keys(obj)) {
     if (obj[key] === value) {

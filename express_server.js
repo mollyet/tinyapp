@@ -21,7 +21,9 @@ app.use(cookieParser());
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item"
+  "QoLQWw":	"http://jsforcats.com/",
+  "9sm5xK": "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item",
+  "Nt1QmP":	"https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445"
 };
 
 const users = {
@@ -34,11 +36,6 @@ const users = {
     id: "Lola",
     email: "lola@meow.com",
     password: "meow"
-  },
-  "butts": {
-    id: "butts",
-    email: "butts@farts.com",
-    password: "butts"
   }
 };
 
@@ -67,10 +64,16 @@ app.get("/urls", (req, res) => {
 
 //add new url
 app.get("/urls/new", (req, res) => {
+  const user = req.cookies.user_id
+  console.log(user)
   const templateVars = {
     user: users[req.cookies["user_id"]]
   };
-  res.render("urls_new", templateVars);
+  if(user){
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("/login")
+  }
 });
 app.post("/urls", (req, res) => {
   const shortURL = randomString();

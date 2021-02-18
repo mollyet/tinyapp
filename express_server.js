@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { randomString } = require("./helpers");
 const { findEmail } = require("./helpers");
+const { findURL } = require("./helpers")
 const app = express();
 const PORT = 8080;
 
@@ -57,18 +58,26 @@ app.get("/urls.json", (req, res) => {
 
 // main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
-  const shortURL = req.params.shortURL
-  const templateVars = {
-    urls: urlDatabase,
-    user: users[req.cookies["user_id"]]
-  };
+  const user = req.cookies.user_id
+  let filteredDatabase = {}
+ for (let url in urlDatabase){
+    if (findURL(urlDatabase[url], user)){
+     filteredDatabase[url] = findURL(urlDatabase[url], user)
+     };
+   }
+
+console.log("filterd database: ", filteredDatabase);
+ const templateVars = {
+  urls: filteredDatabase,
+  user: users[req.cookies["user_id"]]
+ }
   res.render("urls_index", templateVars);
+//  res.redirect("/login")
 });
 
 //add new url
 app.get("/urls/new", (req, res) => {
   const user = req.cookies.user_id
-  console.log(user)
   const templateVars = {
     user: users[req.cookies["user_id"]]
   };

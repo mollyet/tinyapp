@@ -14,6 +14,16 @@ const findEmail = function(obj, value) {
 
 //
 
+const findURL = function(obj, value) {
+  for (let key of Object.keys(obj)) {
+    if (obj[key] === value) {
+      return obj;
+    }
+  }
+};
+
+//
+
 const randomString = function () {
   // inspired from this function found on stackoverflow: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/27747377
   // currently hardcoded for a 6 character long string
@@ -35,4 +45,4 @@ const randomString = function () {
 // console.log(findEmail(test, oof)) //true
 
 
-module.exports = { findEmail, randomString }
+module.exports = { findEmail, randomString, findURL }

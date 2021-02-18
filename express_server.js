@@ -65,14 +65,14 @@ app.get("/urls", (req, res) => {
      filteredDatabase[url] = findURL(urlDatabase[url], user)
      };
    }
-
-console.log("filterd database: ", filteredDatabase);
- const templateVars = {
-  urls: filteredDatabase,
-  user: users[req.cookies["user_id"]]
- }
-  res.render("urls_index", templateVars);
-//  res.redirect("/login")
+if (user) {
+  const templateVars = {
+   urls: filteredDatabase,
+   user: users[req.cookies["user_id"]]
+  }
+   res.render("urls_index", templateVars);
+}
+ res.redirect("/login")
 });
 
 //add new url
@@ -112,17 +112,22 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
-  const shortURL = req.params.shortURL;
-  const longURL = req.body.longURL;
-  // console.log(longURL)
-  // console.log(req.body)
-  urlDatabase[shortURL] = longURL;
-  res.redirect(`/urls/${shortURL}`);
+  const user = req.cookies.user_id
+  if (user) {
+    const shortURL = req.params.shortURL;
+    const longURL = req.body.longURL;
+    urlDatabase[shortURL] = { longURL: longURL, userID: user};
+    res.redirect(`/urls/${shortURL}`);
+  }
+  res.redirect("/login")
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
+  const user = req.cookies.user_id
   const shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
+  if(user) {
+    delete urlDatabase[shortURL];
+  }
   res.redirect("/urls");
 });
 

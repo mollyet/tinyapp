@@ -21,13 +21,12 @@
             </div>
           </form>
           <% } else{ %>
-            <form method="POST" action="/login" class ="nav-item">
               <div class="input-group-append">
-                <input type="form" class="form-control" placeholder= "enter username" name= "username" >
-                <button type="submit" id="button-addon2">Login!</button>
+                <a href="/login"><button type="submit" id="button-addon2">Login!</button></a>
+                <a href="/register"><button type="submit" id="button-addon2">Register!</button></a>
               </div>
+        
               <% } %>
-            </form>
           </div>
   </nav>
 </header>

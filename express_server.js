@@ -72,6 +72,7 @@ if (user) {
    user: users[req.cookies["user_id"]]
   }
    res.render("urls_index", templateVars);
+   return;
 }
  res.redirect("/login")
 });
@@ -84,6 +85,7 @@ app.get("/urls/new", (req, res) => {
   };
   if(user){
     res.render("urls_new", templateVars);
+    return;
   } else {
     res.redirect("/login")
   }
@@ -119,6 +121,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
     const longURL = req.body.longURL;
     urlDatabase[shortURL] = { longURL: longURL, userID: user};
     res.redirect(`/urls/${shortURL}`);
+    return;
   }
   res.redirect("/login")
 });
@@ -128,32 +131,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if(user) {
     delete urlDatabase[shortURL];
+    return;
   }
   res.redirect("/urls");
 });
 
-// login/logout user functionaltiy 
-app.get("/login", (req, res) => {
-  const templateVars = {
-    user: users[req.cookies["user_id"]]
-  };
-  res.render("login", templateVars);
-});
-
-app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  for (const user in users) {
-    if (findEmail(users[user], email)) {
-      if (users[user].password === password) {
-        res.cookie("user_id", users[user].id);
-        res.redirect("/urls");
-      }
-      res.redirect("403_cred");
-    } 
-  }
-  res.redirect("/403_reg");
-});
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
@@ -185,13 +167,38 @@ app.post("/register", (req, res) => {
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(password, salt, (err, hash) => {
       users[userID] = { id: userID, email: email, password: hash };
-      console.log((users[userID]));
-      console.log(users);
       res.cookie("user_id", userID);
       res.redirect("/urls");
     })
   })
 });
+
+// login/logout user functionaltiy
+
+app.get("/login", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["user_id"]]
+  };
+  res.render("login", templateVars);
+});
+
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  for (const user in users) {
+    if (findEmail(users[user], email)) {
+      if (bcrypt.compareSync(password, users[user].password)) {
+        res.cookie("user_id", users[user].id);
+        res.redirect("/urls");
+        return;
+      }
+      res.redirect("403_cred");
+    } 
+  }
+  res.redirect("/403_reg");
+});
+
+
 //error pages
 
 app.get("/403_cred", (req, res) => {

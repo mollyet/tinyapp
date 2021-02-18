@@ -182,12 +182,15 @@ app.post("/register", (req, res) => {
       return;
     }
   }
-  const hashBrowns = 
-  users[userID] = { id: userID, email: email, password: password };
-  console.log((users[userID]));
-  console.log(users);
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      users[userID] = { id: userID, email: email, password: hash };
+      console.log((users[userID]));
+      console.log(users);
+      res.cookie("user_id", userID);
+      res.redirect("/urls");
+    })
+  })
 });
 //error pages
 

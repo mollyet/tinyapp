@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require('bcryptjs');
 const { randomString } = require("./helpers");
 const { findEmail } = require("./helpers");
 const { findURL } = require("./helpers")
@@ -181,6 +182,7 @@ app.post("/register", (req, res) => {
       return;
     }
   }
+  const hashBrowns = 
   users[userID] = { id: userID, email: email, password: password };
   console.log((users[userID]));
   console.log(users);

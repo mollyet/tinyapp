@@ -125,8 +125,7 @@ app.post("/login", (req, res) => {
   for (const user in users) {
     if (findEmail(users[user], email)) {
       if (users[user].password === password){
-        console.log(users[user]);
-        res.cookie("user_id", users[user])
+        res.cookie("user_id", users[user].id)
         res.redirect("/urls");
       }
     }

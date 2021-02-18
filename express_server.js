@@ -112,12 +112,26 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 // login/logout user functionaltiy 
+app.get("/login", (req, res) => {
+  const templateVars =  {
+    user: users[req.cookies["user_id"]]
+  }
+  res.render("login", templateVars)
+});
 
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  // console.log(username)
-  res.cookie("username", username);
-  res.redirect("/urls");
+  const email = req.body.email
+  const password = req.body.password
+  for (const user in users) {
+    if (findEmail(users[user], email)) {
+      if (users[user].password === password){
+        console.log(users[user]);
+        res.cookie("user_id", users[user])
+        res.redirect("/urls");
+      }
+    }
+  }
+  res.redirect("/register")
 });
 
 app.post("/logout", (req, res) => {
@@ -147,12 +161,12 @@ app.post("/register", (req, res) => {
       res.redirect("/400");
       return;
     }
+    users[userID] = { id: userID, email: email, password: password };
+    console.log((users[userID]));
+    console.log(users);
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
   }
-  users[userID] = { id: userID, email: email, password: password };
-  console.log((users[userID]));
-  console.log(users);
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
 });
 //error pages
 

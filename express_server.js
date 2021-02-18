@@ -20,11 +20,15 @@ app.use(cookieParser());
 // global objects (change to class/instanse flavor)
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "QoLQWw":	"http://jsforcats.com/",
-  "9sm5xK": "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item",
-  "Nt1QmP":	"https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445"
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID:"Lola" },
+  "QoLQWw":	{ longURL: "http://jsforcats.com/", userID: "Lola" },
+  "9sm5xK": { longURL: "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item", userID: "Jimmy" },
+  "Nt1QmP":	{ longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy"}
 };
+
+//both of Jimmy's url are  from Bibliotheque Nationale France, onse show a manuscript image of
+// Chiristine de Pizan presumably writing this Manuscript, BnF Francais 835, f. 1r . 
+//The other is the actual libary info/ write up for said MS; 
 
 const users = {
   "Jimmy": {
@@ -39,8 +43,6 @@ const users = {
   }
 };
 
-//test url is from Bibliotheque Nationale France, and shows a manuscript image of
-// Chiristine de Pizan presumably writing this Manuscript. BnF Francais 835, f. 1r https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445
 
 // server functionality-- pages/etc
 
@@ -55,6 +57,7 @@ app.get("/urls.json", (req, res) => {
 
 // main urls page-- displays them in a table 
 app.get("/urls", (req, res) => {
+  const shortURL = req.params.shortURL
   const templateVars = {
     urls: urlDatabase,
     user: users[req.cookies["user_id"]]
@@ -78,18 +81,18 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies.user_id};
   res.redirect(`/urls/${shortURL}`);
 });
 
 // points to specific short url
 app.get("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL
   const templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
+    shortURL: shortURL,
+    longURL: urlDatabase[shortURL].longURL,
     user: users[req.cookies["user_id"]]
   };
-  // console.log(urlDatabase)
   res.render("urls_show", templateVars);
 });
 

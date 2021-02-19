@@ -62,7 +62,7 @@ if (user) {
 app.get("/urls/new", (req, res) => {
   const user = req.session.user_id
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   if(user){
     res.render("urls_new", templateVars);
@@ -74,7 +74,7 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const longURL = req.body.longURL;
-  urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies.user_id};
+  urlDatabase[shortURL] = { longURL: longURL, userID: req.session.user_id};
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -112,7 +112,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if(user) {
     delete urlDatabase[shortURL];
-    return;
   }
   res.redirect("/urls");
 });
@@ -184,7 +183,7 @@ app.post("/logout", (req, res) => {
 
 app.get("/403_cred", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.status(403);
   res.render("403_cred", templateVars);
@@ -192,7 +191,7 @@ app.get("/403_cred", (req, res) => {
 
 app.get("/403_reg", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.status(403);
   res.render("403_reg", templateVars);
@@ -200,7 +199,7 @@ app.get("/403_reg", (req, res) => {
 
 app.get("/400", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.status(400);
   res.render("400", templateVars);
@@ -208,7 +207,7 @@ app.get("/400", (req, res) => {
 
 app.get("*", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[req.session.user_id]
   };
   res.status(404);
   res.render("404", templateVars);

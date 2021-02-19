@@ -12,19 +12,19 @@ const { urlDatabase } = require("./helpers")
 const app = express();
 const PORT = 8080;
 
-// middleware soon? 
-app.set("view engine", "ejs"); //in this house we use ejs as our view engine 
+//in this house we use ejs as our view engine 
+
+app.set("view engine", "ejs"); 
+
+//initialize middleware
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: "session",
   keys: ["skeleton-key", "crypt-key", "fancy-key" ],
 }));
 
-//globl functions -- moved to helpers.js
-
-
-
-// global objects -- moved to helpers.js
+//globl functions && global objects -- moved to helpers.js
 
 
 // server functionality-- pages/etc

@@ -30,8 +30,13 @@ app.use(cookieSession({
 // server functionality-- pages/etc
 
 app.get("/", (req, res) => {
+  const user = req.session.user_id
   const templateVars = {
     user: users[req.session.user_id]
+   }
+   if(user) {
+     res.redirect("/urls");
+     return;
    }
   res.render("welcome", templateVars);
 });

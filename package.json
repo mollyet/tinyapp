@@ -1,8 +1,8 @@
 {
   "name": "tinyapp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A small url shortening app made with express and ejs",
+  "main": "express_server.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon -L express_server.js",
     "test": "./node_modules/mocha/bin/mocha"
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/mollyet/tinyapp.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Molly Trepanier",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mollyet/tinyapp/issues"

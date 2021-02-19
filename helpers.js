@@ -9,9 +9,11 @@ const urlDatabase = {
   "Nt1QmP":	{ longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy"}
 };
 
-//both of Jimmy's url are  from Bibliotheque Nationale France, onse show a manuscript image of
-// Chiristine de Pizan presumably writing this Manuscript, BnF Francais 835, f. 1r . 
-//The other is the actual libary info/ write up for said MS; 
+/*
+ * both of Jimmy's url are  from Bibliotheque Nationale France, ones show a manuscript image of
+ * Chiristine de Pizan writing the Manuscript linked, BnF Francais 835, f. 1r . 
+ * The other is the actual libary info/ write up for said MS;
+ */
 
 const users = {
   "Jimmy": {
@@ -25,6 +27,11 @@ const users = {
     password: "$2a$10$LN4332ZB7ToT4U5c1WCxTO2M//q8DVm/SnGOw2Vopvm4kU3et03VW"
   }
 };
+/**
+ * Kept test users within helpers for testing purposes -- do NOT delete them
+ * passwords for test users are the domain name of their email address
+ * so, the password for "email@email.com" would be "email" ;)
+ */
 
 // helper f(x)s
 
@@ -62,13 +69,6 @@ const randomString = function () {
   return newString;
 };
 
-
-// const test = { id: 'hjHgro', email: 'lola@meow.com', password: 'meow' }
-// const yikes = "jimmy@meow.com"
-// const oof = "lola@meow.com"
-
-// console.log(findEmail(test, yikes)) //false
-// console.log(findEmail(test, oof)) //true
-
+//
 
 module.exports = { findEmail, randomString, findURL, urlDatabase, users }

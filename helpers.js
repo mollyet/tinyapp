@@ -3,15 +3,15 @@
 // global f(x)s for testing, from express_server.js
 
 const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID:"Lola" },
-  "QoLQWw":	{ longURL: "http://jsforcats.com/", userID: "Lola" },
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "Lola" },
+  "QoLQWw": { longURL: "http://jsforcats.com/", userID: "Lola" },
   "9sm5xK": { longURL: "https://gallica.bnf.fr/ark:/12148/btv1b8449047c/f9.item", userID: "Jimmy" },
-  "Nt1QmP":	{ longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy"}
+  "Nt1QmP": { longURL: "https://archivesetmanuscrits.bnf.fr/ark:/12148/cc779445", userID: "Jimmy" }
 };
 
 /*
  * both of Jimmy's url are  from Bibliotheque Nationale France, ones show a manuscript image of
- * Chiristine de Pizan writing the Manuscript linked, BnF Francais 835, f. 1r . 
+ * Chiristine de Pizan writing the Manuscript linked, BnF Francais 835, f. 1r .
  * The other is the actual libary info/ write up for said MS;
  */
 
@@ -57,10 +57,10 @@ const findURL = function(obj, value) {
 
 //
 
-const randomString = function () {
+const randomString = function() {
   // inspired from this function found on stackoverflow: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/27747377
   // currently hardcoded for a 6 character long string
-  
+
   const abcNums = "abcdefghijklmnopqrstuvwxyzABCEDEGHIJKLMNOPQRSTUVWXYZ1234567890";
   let newString = "";
   for (let i = 0; i < 6; i++) {
@@ -71,4 +71,4 @@ const randomString = function () {
 
 //
 
-module.exports = { findEmail, randomString, findURL, urlDatabase, users }
+module.exports = { findEmail, randomString, findURL, urlDatabase, users };

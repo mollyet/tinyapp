@@ -6,22 +6,22 @@ const cookieSession = require("cookie-session");
 const bcrypt = require('bcryptjs');
 const { randomString } = require("./helpers");
 const { findEmail } = require("./helpers");
-const { findURL } = require("./helpers")
-const { users } = require("./helpers")
-const { urlDatabase } = require("./helpers")
+const { findURL } = require("./helpers");
+const { users } = require("./helpers");
+const { urlDatabase } = require("./helpers");
 const app = express();
 const PORT = 8080;
 
-//in this house we use ejs as our view engine 
+//in this house we use ejs as our view engine
 
-app.set("view engine", "ejs"); 
+app.set("view engine", "ejs");
 
 //initialize middleware
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: "session",
-  keys: ["skeleton-key", "crypt-key", "fancy-key" ],
+  keys: ["skeleton-key", "crypt-key", "fancy-key"],
 }));
 
 //globl functions && global objects -- moved to helpers.js
@@ -30,14 +30,14 @@ app.use(cookieSession({
 // server functionality-- pages/etc
 
 app.get("/", (req, res) => {
-  const user = req.session.user_id
+  const user = req.session.user_id;
   const templateVars = {
     user: users[req.session.user_id]
-   }
-   if(user) {
-     res.redirect("/urls");
-     return;
-   }
+  };
+  if (user) {
+    res.redirect("/urls");
+    return;
+  }
   res.render("welcome", templateVars);
 });
 
@@ -46,37 +46,37 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-// main urls page-- displays them in a table 
+// main urls page-- displays them in a table
 app.get("/urls", (req, res) => {
-  const user = req.session.user_id
-  let filteredDatabase = {}
- for (let url in urlDatabase){
-    if (findURL(urlDatabase[url], user)){
-     filteredDatabase[url] = findURL(urlDatabase[url], user)
-     };
-   }
-if (user) {
-  const templateVars = {
-   urls: filteredDatabase,
-   user: users[req.session.user_id]
+  const user = req.session.user_id;
+  let filteredDatabase = {};
+  for (let url in urlDatabase) {
+    if (findURL(urlDatabase[url], user)) {
+      filteredDatabase[url] = findURL(urlDatabase[url], user);
+    }
   }
-   res.render("urls_index", templateVars);
-   return;
-}
- res.redirect("/login")
+  if (user) {
+    const templateVars = {
+      urls: filteredDatabase,
+      user: users[req.session.user_id]
+    };
+    res.render("urls_index", templateVars);
+    return;
+  }
+  res.redirect("/login");
 });
 
 //add new url
 app.get("/urls/new", (req, res) => {
-  const user = req.session.user_id
+  const user = req.session.user_id;
   const templateVars = {
     user: users[req.session.user_id]
   };
-  if(user){
+  if (user) {
     res.render("urls_new", templateVars);
     return;
   } else {
-    res.redirect("/login")
+    res.redirect("/login");
   }
 });
 
@@ -84,13 +84,13 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const longURL = req.body.longURL;
-  urlDatabase[shortURL] = { longURL: longURL, userID: req.session.user_id};
+  urlDatabase[shortURL] = { longURL: longURL, userID: req.session.user_id };
   res.redirect(`/urls/${shortURL}`);
 });
 
 // points to specific short url
 app.get("/urls/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL
+  const shortURL = req.params.shortURL;
   const templateVars = {
     shortURL: shortURL,
     longURL: urlDatabase[shortURL].longURL,
@@ -107,22 +107,22 @@ app.get("/u/:shortURL", (req, res) => {
 
 //edits shortURL
 app.post("/urls/:shortURL/edit", (req, res) => {
-  const user = req.session.user_id
+  const user = req.session.user_id;
   if (user) {
     const shortURL = req.params.shortURL;
     const longURL = req.body.longURL;
-    urlDatabase[shortURL] = { longURL: longURL, userID: user};
+    urlDatabase[shortURL] = { longURL: longURL, userID: user };
     res.redirect(`/urls/${shortURL}`);
     return;
   }
-  res.redirect("/login")
+  res.redirect("/login");
 });
 
 //thank u, next!
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const user = req.session.user_id
+  const user = req.session.user_id;
   const shortURL = req.params.shortURL;
-  if(user) {
+  if (user) {
     delete urlDatabase[shortURL];
   }
   res.redirect("/urls");
@@ -155,10 +155,10 @@ app.post("/register", (req, res) => {
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(password, salt, (err, hash) => {
       users[userID] = { id: userID, email: email, password: hash };
-      req.session.user_id = userID
+      req.session.user_id = userID;
       res.redirect("/urls");
-    })
-  })
+    });
+  });
 });
 
 // login/logout user functionaltiy
@@ -181,7 +181,7 @@ app.post("/login", (req, res) => {
         return;
       }
       res.redirect("403_cred");
-    } 
+    }
   }
   res.redirect("/403_reg");
 });
@@ -225,7 +225,7 @@ app.get("*", (req, res) => {
   res.render("404", templateVars);
 });
 
-// lets server listen, end of server functionality 
+// lets server listen, end of server functionality
 
 app.listen(PORT, () => {
   console.log(`Hello from Sunny Port ${PORT}! 🌈 🌞 🌴`);

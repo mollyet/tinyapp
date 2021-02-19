@@ -30,7 +30,10 @@ app.use(cookieSession({
 // server functionality-- pages/etc
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  const templateVars = {
+    user: users[req.session.user_id]
+   }
+  res.render("welcome", templateVars);
 });
 
 // renders urls as  json object
@@ -71,6 +74,8 @@ app.get("/urls/new", (req, res) => {
     res.redirect("/login")
   }
 });
+
+// assigns new string to short URL
 app.post("/urls", (req, res) => {
   const shortURL = randomString();
   const longURL = req.body.longURL;
@@ -89,11 +94,13 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+//redirects shortURL to longURL
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
+//edits shortURL
 app.post("/urls/:shortURL/edit", (req, res) => {
   const user = req.session.user_id
   if (user) {
@@ -106,6 +113,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
   res.redirect("/login")
 });
 
+//thank u, next!
 app.post("/urls/:shortURL/delete", (req, res) => {
   const user = req.session.user_id
   const shortURL = req.params.shortURL;
@@ -135,7 +143,7 @@ app.post("/register", (req, res) => {
   }
   for (const user in users) {
     if (findEmail(users[user], email)) {
-      res.redirect("/403_cred");
+      res.redirect("/400");
       return;
     }
   }

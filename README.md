@@ -20,7 +20,9 @@ User "Jimmy" creates a New URL
 
 ## Getting Started
 
+- Clone project into directory of choice
+  - * Please ensure any other severs using Port 8080 are fully shut off before running*
 - Install all dependencies (using the `npm install` command).
-- Run the development web server using the `node express_server.js` command.
+- Run the development web server using the `npm start` command.
 - In your browser of choice, navigate to http://localhost:8080/
 - Have Fun!

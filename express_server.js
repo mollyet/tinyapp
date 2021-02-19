@@ -181,6 +181,7 @@ app.post("/login", (req, res) => {
         return;
       }
       res.redirect("403_cred");
+      return;
     }
   }
   res.redirect("/403_reg");

@@ -12,7 +12,6 @@
 
 <body>
   <div class="card text-center">
-      <div class="card-header"></div>
       <div class="card-body">
         <h5 class="card-title">TinyURL for: <a href = "/u/<%= longURL %>"></a><%= longURL %></a></h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
@@ -23,7 +22,7 @@
           <div class="input-group mb-3">
             <input type="form" class="form-control" placeholder= "<%= longURL %>" name= "longURL" >
             <div class="input-group-append">
-              <button type="submit" id="button-addon2">Edit</button>
+              <button class="btn btn-outline-success" type="submit" id="button-addon2">Edit</button>
             </div>
     
   </div> 

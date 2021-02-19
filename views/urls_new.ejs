@@ -17,9 +17,12 @@
       <h3>Create TinyURL</h3>
       <form class="form-inline" action="/urls" method="POST">
         <div class="form-group mb-2">
-          <label for="longURL">Enter a URL:</label>
-          <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
-          <button type="submit">Submit</button>
+            <div class="input-group-prepend">
+              <span class="input-group-text" name="password">Enter a URL: </span>
+            </div>
+            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 500px">
+            <button class="btn btn-outline-success" type="submit">Submit</button>
+          </div>
         </div>
       </form>
     </main>

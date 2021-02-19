@@ -15,15 +15,15 @@
     <div class= "input-group-append">
         <% if (user) { %> 
           <form method="POST" action="/logout" class ="nav-item">
-            <div class="input-group-append">
-              <a class ="nav-item nav-link" >hello, <%= user.email %>! </a> 
-              <button type="submit" id="button-addon2">Logout!</button>
+            <div class="navbar-nav">
+              <a class ="nav-item nav-link" > <b>hello, <%= user.email %>!</b> </a> 
+              <button type="submit" class="btn btn-outline-light" id="button-addon2">Logout!</button>
             </div>
           </form>
           <% } else{ %>
-              <div class="input-group-append">
-                <a href="/login"><button type="submit" id="button-addon2">Login!</button></a>
-                <a href="/register"><button type="submit" id="button-addon2">Register!</button></a>
+              <div class="navbar-nav">
+                <a href="/login"><button type="submit" class="btn btn-outline-light" id="button-addon2">Login!</button></a>
+                <a href="/register"><button type="submit" class="btn btn-outline-light" id="button-addon2">Register!</button></a>
               </div>
         
               <% } %>
